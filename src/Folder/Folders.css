@@ -1,0 +1,14 @@
+.folders{
+    margin: 0;
+    border: 1px black solid;
+    display: block;
+    width: 30%;
+    padding-top: 10px;
+}
+.add-folder{
+    border: 1px black solid;
+    width: 90%;
+    height: 40px;
+    margin: 5px;
+    background-color: white;
+}

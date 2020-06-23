@@ -1,0 +1,10 @@
+.folder{
+    border: solid 1px black;
+    height: 40px; 
+}
+.folder > a{
+    text-decoration: none;
+}
+.selected{
+    background-color: aqua;
+}

@@ -1,0 +1,10 @@
+.note-container{
+    border: 1px solid black;
+    margin: 30px;
+}
+.note-info{
+    display: inline-block;
+}
+h2{
+    float: left;
+}

@@ -1,0 +1,8 @@
+.header{
+    text-decoration: none;
+    border: black 1px solid;
+    width: 100%;
+    display: block;
+    text-align: center;
+    height: 65px;
+}
