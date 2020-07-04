@@ -1,16 +1,19 @@
 import React from 'react'
 import Folder from '../components/Folder'
 import './Folders.css'
+import NoteContext from '../NoteContext'
+
 
 class Folders extends React.Component{
-
-    folders = this.props.folders.map(folder => 
-        <Folder name={folder.name} id={folder.id}/>
-        )
+    
+    static contextType = NoteContext
     render(){
+        const folders = this.context.folders.map((folder, idx) => 
+            <Folder key={idx} name={folder.name} id={folder.id}/>
+            )
         return(
             <div className='folders'>
-                {this.folders}
+                {folders}
                 <button className='add-folder'>Add folder</button>
             </div>
         )
