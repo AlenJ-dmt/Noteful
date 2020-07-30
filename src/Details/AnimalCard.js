@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from 'react-router-dom'
 import './AnimalCard.css'
+import PropTypes from 'prop-types'
 
 class AnimalCard extends React.Component {
   render() {
@@ -18,5 +19,10 @@ class AnimalCard extends React.Component {
       </div>
     );
   }
+}
+
+AnimalCard.propType = {
+  selectedNote: PropTypes.object,
+  currentFolder: PropTypes.array
 }
 export default AnimalCard;

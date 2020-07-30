@@ -1,7 +1,7 @@
 import React from "react";
 import AnimalCard from './AnimalCard'
 import NoteContext from '../NoteContext'
-
+import PropTypes from 'prop-types'
 
 class Details extends React.Component {
   static contextType = NoteContext
@@ -13,6 +13,10 @@ class Details extends React.Component {
       <AnimalCard selectedNote={this.selectedNote} currentFolder={this.currentFolder}/>
     );
   }
+}
+
+Details.propTypes = {
+  noteId: PropTypes.string
 }
 
 export default Details;

@@ -1,34 +1,69 @@
 import React from "react";
 import Note from "../components/Note";
 import "./Notes.css";
-import NoteContext from '../NoteContext'
-
+import NoteContext from "../NoteContext";
+import AddNote from "../components/AddNote";
+import PropTypes from 'prop-types';
 
 class Notes extends React.Component {
-  static contextType = NoteContext
+  static contextType = NoteContext;
 
-  handleDeleteNote = noteId => {
-    console.log(this.props)
-    this.props.history.push(`/`)
-  }
+  state = {
+    createNote: false,
+  };
 
-  notesComponent = () =>{
-    if (this.props.folderId === undefined){
-      return this.context.notes.map((note, idx) => 
-        <Note key={idx} id={note.id} onDeleteNote={this.handleDeleteNote} name={note.name} date={note.modified} />
-      )
-    } else{
-      let notes = this.context.notes.filter(note => note.folderId === this.props.folderId )
-      return  notes.map((note, idx) => 
-        <Note key={idx} id={note.id} onDeleteNote={this.handleDeleteNote} name={note.name} date={note.modified} /> )
+  handleDeleteNote = () => {
+    this.props.history.push(`/`);
+  };
+
+  notesComponent = () => {
+    if (this.props.folderId === undefined) {
+      return this.context.notes.map((note, idx) => (
+        <Note
+          key={idx}
+          id={note.id}
+          onDeleteNote={this.handleDeleteNote}
+          name={note.name}
+          date={note.modified}
+        />
+      ));
+    } else {
+      let notes = this.context.notes.filter(
+        (note) => note.folderId === this.props.folderId
+      );
+      return notes.map((note, idx) => (
+        <Note
+          key={idx}
+          id={note.id}
+          onDeleteNote={this.handleDeleteNote}
+          name={note.name}
+          date={note.modified}
+        />
+      ));
     }
-  }
-  
+  };
+
   render() {
-    let notesComponent = [];
-    
-    return (<div className="notes">{this.notesComponent()}</div>)
+    return (
+      <div className="notes">
+        {this.notesComponent()}
+        <button
+          onClick={() => {
+            this.setState({
+              createNote: true,
+            });
+          }}
+        >
+          Add Note
+        </button>
+        {this.state.createNote && <AddNote />}
+      </div>
+    );
   }
+}
+
+Notes.propTypes ={
+  folderId: PropTypes.string
 }
 
 export default Notes;
