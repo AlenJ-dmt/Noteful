@@ -2,22 +2,18 @@ import React from "react";
 import Note from "../components/Note";
 import "./Notes.css";
 import NoteContext from "../NoteContext";
-import AddNote from "../components/AddNote";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
+import ErrorMsg from "../components/ErrorMsg";
 
 class Notes extends React.Component {
   static contextType = NoteContext;
-
-  state = {
-    createNote: false,
-  };
 
   handleDeleteNote = () => {
     this.props.history.push(`/`);
   };
 
   notesComponent = () => {
-    const { folderId } = this.props.match.params 
+    const { folderId } = this.props.match.params;
     if (folderId === undefined) {
       return this.context.notes.map((note, idx) => (
         <Note
@@ -47,24 +43,18 @@ class Notes extends React.Component {
   render() {
     return (
       <div className="notes">
+        {this.context.fetchError && <ErrorMsg>Somthing Went Wrong</ErrorMsg>}
         {this.notesComponent()}
-        <button
-          onClick={() => {
-            this.setState({
-              createNote: true,
-            });
-          }}
-        >
+        <button onClick={() => this.props.history.push(`/addNote`)}>
           Add Note
         </button>
-        {this.state.createNote && <AddNote folderId={this.props.folderId} />}
       </div>
     );
   }
 }
 
-Notes.propTypes ={
-  folderId: PropTypes.string
-}
+Notes.propTypes = {
+  folderId: PropTypes.string,
+};
 
 export default Notes;

@@ -17,7 +17,7 @@ class App extends React.Component {
   state = {
     folders: [],
     notes: [],
-    isCreatingNewFolder: false,
+    fetchError: false,
   };
 
   componentDidMount() {
@@ -26,32 +26,32 @@ class App extends React.Component {
 
   fetchData = () => {
     fetch(`${config.API_ENDPOINT}/folders`)
-      .then((response) => response.json())
-      .then((jsonResponse) =>
-        this.setState({
-          folders: jsonResponse,
-        }, console.log(jsonResponse))
-      );
-    // .catch(function (err) {
-    //   console.log("Fetch Error :-S", err);
-    // });
+      .then((response) => {
+        if (response.status !== 200) {
+          console.log(
+            "Looks like there was a problem. Status Code: " + response.status
+          );
+          return;
+        }
+        response
+          .json()
+          .then((jsonResponse) => this.setState({ folders: jsonResponse }));
+      })
+      .catch((err) => this.setState({ fetchError: true }));
 
     fetch(`${config.API_ENDPOINT}/notes`)
-      // .then(function (response) {
-      //   if (response.status !== 200) {
-      //     console.log(
-      //       "Looks like there was a problem. Status Code: " + response.status
-      //     );
-      //     return;
-      //   }
-      // })
-      .then((response) => response.json())
-      .then((jsonResponse) =>
-        this.setState({
-          notes: jsonResponse,
-        })
-      );
-    // .catch((err) => <ErrorMsg>{err}</ErrorMsg>);
+      .then((response) => {
+        if (response.status !== 200) {
+          console.log(
+            "Looks like there was a problem. Status Code: " + response.status
+          );
+          return;
+        }
+        response
+          .json()
+          .then((jsonResponse) => this.setState({ notes: jsonResponse }));
+      })
+      .catch((err) => this.setState({ fetchError: true }));
   };
 
   handleDeleteNote = (noteId) => {
@@ -77,6 +77,7 @@ class App extends React.Component {
       deleteNote: this.handleDeleteNote,
       isCreatingNewFolder: this.state.isCreatingNewFolder,
       handleCreateNewFolder: this.handleCreateNewFolder,
+      fetchError: this.state.fetchError,
     };
     return (
       <div className="App">
