@@ -8,13 +8,12 @@ class Folders extends React.Component {
   static contextType = NoteContext;
   state = {
     createNewFolder: false,
-    folders: this.context.folders
   };
   render() {
     const folders = this.context.folders.map((folder, idx) => (
       <Folder key={idx} name={folder.name} id={folder.id} />
     ));
-    console.log(this.state.folders)
+    
     return (
       <div className="folders">
         {folders}

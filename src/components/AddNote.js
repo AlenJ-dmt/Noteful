@@ -1,4 +1,5 @@
 import React from 'react'
+import config from '../config'
 var uniqid = require("uniqid");
 
 class AddNote extends React.Component{
@@ -21,7 +22,7 @@ class AddNote extends React.Component{
         let folderId= window.location.pathname.substring(8)
         console.log(createdTime)
 
-        fetch("http://localhost:9090/notes", {
+        fetch(`${config.API_ENDPOINT}/notes`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -34,7 +35,7 @@ class AddNote extends React.Component{
           content: this.state.noteContent
         }),
       });
-            
+      window.location.href = `/folder/${this.props.folderId}`
     }
     render(){
         return(

@@ -9,7 +9,7 @@ class Main extends React.Component{
         return(
             <div className='main' >
                 <Folders />
-                <Notes {...this.props} folderId={this.props.folderId} />
+                <Notes {...this.props} />
             </div>
         )
     }

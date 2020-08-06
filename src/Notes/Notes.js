@@ -17,7 +17,8 @@ class Notes extends React.Component {
   };
 
   notesComponent = () => {
-    if (this.props.folderId === undefined) {
+    const { folderId } = this.props.match.params 
+    if (folderId === undefined) {
       return this.context.notes.map((note, idx) => (
         <Note
           key={idx}
@@ -29,7 +30,7 @@ class Notes extends React.Component {
       ));
     } else {
       let notes = this.context.notes.filter(
-        (note) => note.folderId === this.props.folderId
+        (note) => note.folderId === folderId
       );
       return notes.map((note, idx) => (
         <Note
@@ -56,7 +57,7 @@ class Notes extends React.Component {
         >
           Add Note
         </button>
-        {this.state.createNote && <AddNote />}
+        {this.state.createNote && <AddNote folderId={this.props.folderId} />}
       </div>
     );
   }

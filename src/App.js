@@ -8,6 +8,10 @@ import Header from "./components/Header";
 import Details from "./Details/Details";
 import NoteContext from "./NoteContext";
 import ErrorBoundary from "../src/components/ErrorBoundary";
+import config from "./config";
+import ErrorMsg from "./components/ErrorMsg";
+import AddNote from "./components/AddNote";
+import AddFolder from "./components/AddFolder";
 
 class App extends React.Component {
   state = {
@@ -21,24 +25,33 @@ class App extends React.Component {
   }
 
   fetchData = () => {
-    console.log("hellots");
-    fetch("http://localhost:9090/folders")
+    fetch(`${config.API_ENDPOINT}/folders`)
       .then((response) => response.json())
       .then((jsonResponse) =>
-        this.setState(
-          {
-            folders: jsonResponse,
-          },
-          console.log(this.state.folders)
-        )
+        this.setState({
+          folders: jsonResponse,
+        }, console.log(jsonResponse))
       );
-    fetch("http://localhost:9090/notes")
+    // .catch(function (err) {
+    //   console.log("Fetch Error :-S", err);
+    // });
+
+    fetch(`${config.API_ENDPOINT}/notes`)
+      // .then(function (response) {
+      //   if (response.status !== 200) {
+      //     console.log(
+      //       "Looks like there was a problem. Status Code: " + response.status
+      //     );
+      //     return;
+      //   }
+      // })
       .then((response) => response.json())
       .then((jsonResponse) =>
         this.setState({
           notes: jsonResponse,
         })
       );
+    // .catch((err) => <ErrorMsg>{err}</ErrorMsg>);
   };
 
   handleDeleteNote = (noteId) => {
@@ -48,7 +61,13 @@ class App extends React.Component {
   };
 
   handleCreateNewFolder = () => {
-    this.fetchData();
+    fetch(`${config.API_ENDPOINT}/folders`)
+      .then((response) => response.json())
+      .then((jsonResponse) =>
+        this.setState({
+          folders: jsonResponse,
+        })
+      );
   };
 
   render() {
@@ -70,12 +89,7 @@ class App extends React.Component {
                 exact
                 path="/folder/:folderId"
                 // render={() => <Folders folders={this.state.Store.folders} />}
-                render={(props) => (
-                  <Main
-                    {...props}
-                    folderId={window.location.pathname.substring(8)}
-                  />
-                )}
+                render={(props) => <Main {...props} />}
               />
               <Route
                 exact
@@ -83,12 +97,20 @@ class App extends React.Component {
                 render={(props) => (
                   <Details
                     {...props}
-                    noteId={window.location.pathname.substring(6)}
+                    // noteId={window.location.pathname.substring(6)}
                   />
                 )}
               />
-              {/* <div className="note"> */}
-              {/* </div> */}
+              <Route
+                exact
+                path="/addNote"
+                render={(props) => <AddNote {...props} />}
+              />
+              <Route
+                exact
+                path="/addFolder"
+                render={(props) => <AddFolder {...props} />}
+              />
               <Route component={NotFoundPage} />
             </Switch>
           </NoteContext.Provider>

@@ -5,12 +5,14 @@ import PropTypes from 'prop-types'
 
 class Details extends React.Component {
   static contextType = NoteContext
-    selectedNote =  this.context.notes.filter(note => note.id === this.props.noteId)
-    currentFolder = this.context.folders.filter(folder => folder.id === this.selectedNote[0].folderId)
-    
+  
   render() {
+    const { noteId } = this.props.match.params
+    const selectedNote =  this.context.notes.filter(note => note.id === noteId)
+    const currentFolder = this.context.folders.filter(folder => folder.id === selectedNote[0].folderId)
+    
     return (
-      <AnimalCard selectedNote={this.selectedNote} currentFolder={this.currentFolder}/>
+      <AnimalCard selectedNote={selectedNote} currentFolder={currentFolder}/>
     );
   }
 }
