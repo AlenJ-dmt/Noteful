@@ -6,12 +6,13 @@ var uniqid = require("uniqid");
 
 class AddFolder extends React.Component {
   static contextType = NoteContext;
-  
+
   state = {
     folder: {
       foldername: "",
       error: "",
       touched: false,
+      addFolderError: false,
     },
   };
   inputChangeHandler = (ev) => {
@@ -33,6 +34,7 @@ class AddFolder extends React.Component {
           foldername: "",
           error: "Folder name is required",
           touched: true,
+          addFolderError: false,
         },
       });
     } else if (FolderName < 4) {
@@ -63,17 +65,40 @@ class AddFolder extends React.Component {
           id: uniqid(),
           name: this.state.folder.foldername,
         }),
-      }).then(() => {
-        this.setState({
-          folder: {
-            foldername: "",
-            error: "",
-            touched: false,
-          },
-        });
       })
-      .then(() => {this.context.handleCreateNewFolder()})
-      
+        .then((response) => {
+          if (response.status !== 201) {
+            console.log(
+              "Looks like there was a problem. Status Code: " + response.status
+            );
+            return;
+          }
+          response
+            .json()
+            .then(() => {
+              this.setState({
+                folder: {
+                  foldername: "",
+                  error: "",
+                  touched: false,
+                  addFolderError: false,
+                },
+              });
+            })
+            .then(() => {
+              this.context.handleCreateNewFolder();
+            });
+        })
+        .catch((err) =>
+          this.setState({
+            folder: {
+              foldername: "",
+              touch: false,
+              addFolderError: true,
+              error: "Something went Wrong while adding new folder",
+            },
+          })
+        );
     }
   };
 
@@ -96,6 +121,9 @@ class AddFolder extends React.Component {
           )}
         </p>
         <button onClick={(ev) => this.createNewFolder(ev)}>Save</button>
+        {this.state.folder.addFolderError && (
+          <ValidationError message={this.state.folder.error} />
+        )}
       </form>
     );
   }

@@ -9,7 +9,6 @@ import Details from "./Details/Details";
 import NoteContext from "./NoteContext";
 import ErrorBoundary from "../src/components/ErrorBoundary";
 import config from "./config";
-import ErrorMsg from "./components/ErrorMsg";
 import AddNote from "./components/AddNote";
 import AddFolder from "./components/AddFolder";
 
@@ -70,6 +69,16 @@ class App extends React.Component {
       );
   };
 
+  handleCreateNewNote = () =>{
+    fetch(`${config.API_ENDPOINT}/notes`)
+      .then((response) => response.json())
+      .then((jsonResponse) =>
+        this.setState({
+          notes: jsonResponse,
+        })
+      );
+  }
+
   render() {
     const value = {
       notes: this.state.notes,
@@ -78,6 +87,7 @@ class App extends React.Component {
       isCreatingNewFolder: this.state.isCreatingNewFolder,
       handleCreateNewFolder: this.handleCreateNewFolder,
       fetchError: this.state.fetchError,
+      handleCreateNewNote: this.handleCreateNewNote
     };
     return (
       <div className="App">

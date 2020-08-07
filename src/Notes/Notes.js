@@ -54,7 +54,7 @@ class Notes extends React.Component {
 }
 
 Notes.propTypes = {
-  folderId: PropTypes.string,
+  folderId: PropTypes.string
 };
 
 export default Notes;
