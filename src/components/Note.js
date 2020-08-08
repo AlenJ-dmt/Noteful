@@ -32,10 +32,10 @@ class Note extends React.Component {
   render() {
     return (
       <div className="note-container">
-        <Link to={`/note/${this.props.id}`}>{this.props.name}</Link>
+        <Link id='note-name' to={`/note/${this.props.id}`}>{this.props.name}</Link>
         <div className="note-info">
-          <p>{this.props.date}</p>
-          <button onClick={(ev) => {this.handleClickDelete(ev)}}> Delete </button>
+          <p id='date-modified' >Modified: {this.props.date.slice(0, 10)}</p>
+          <button className='btn' onClick={(ev) => {this.handleClickDelete(ev)}}> Delete </button>
         </div>
       </div>
     );

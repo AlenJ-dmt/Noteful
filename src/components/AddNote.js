@@ -7,24 +7,84 @@ var uniqid = require("uniqid");
 class AddNote extends React.Component {
   static contextType = NoteContext;
   state = {
-    Name: "",
-    Content: "",
-    Folder: "Select",
+    title: "",
+    content: "",
+    selectedFolder: "Select",
     folders: [],
-    NameTouch: false,
-    ContentTouch: false,
-    FolderTouch: false,
-    NameError: "",
-    ContentError: "",
-    FolderError: "",
+    nameTouch: false,
+    contentTouch: false,
+    folderTouch: false,
+    titleError: "",
+    contentError: "",
+    folderError: "",
     error: "",
     createNewNoteError: false,
+    isTitleValid: false,
+    isContentValid: false,
+    isSelectedFolderValid: false,
+    isFormReady: false,
+    evTargetName: "",
+    evTargetValue: "",
   };
 
   inputChangeHanlder = (ev) => {
+    // console.log(ev.target.name)
+    this.setState(
+      {
+        [ev.target.name]: ev.target.value,
+        evTargetName: ev.target.name,
+        evTargetValue: ev.target.value,
+        //[ev.target.name + "Touch"]: true,
+      },
+      () => {
+        this.validateInput(this.state.evTargetName, this.state.evTargetValue);
+      }
+    );
+  };
+
+  validateInput = (inputName, inputValue) => {
+
+    if (inputName === "selectedFolder") {
+      if (inputValue !== "Select") {
+        this.setState(
+          {
+            isSelectedFolderValid: true,
+          },
+          this.validateForm
+        );
+      } else {
+        this.setState(
+          {
+            isSelectedFolderValid: false,
+          },
+          this.validateForm
+        );
+      }
+    } else {
+      if (inputValue.length > 4) {
+        this.setState(
+          {
+            [inputName === "title" ? "isTitleValid" : "isContentValid"]: true,
+          },
+          this.validateForm
+        );
+      } else {
+        this.setState(
+          {
+            [inputName === "title" ? "isTitleValid" : "isContentValid"]: false,
+          },
+          this.validateForm
+        );
+      }
+    }
+  };
+
+  validateForm = () => {
     this.setState({
-      [ev.target.name]: ev.target.value,
-      [ev.target.name + "Touch"]: true,
+      isFormReady:
+        this.state.isTitleValid &&
+        this.state.isContentValid &&
+        this.state.isSelectedFolderValid,
     });
   };
 
@@ -45,33 +105,18 @@ class AddNote extends React.Component {
         [Touch]: true,
       });
     } else {
-      return true;
+      this.setState({
+        isFormReady: true,
+      });
     }
   };
   saveNewNote = (ev) => {
     ev.preventDefault();
-    let isNameValid = this.UserInputHandler(
-      this.state.Name,
-      "NameTouch",
-      "NameError"
-    );
-    let isContentValid = this.UserInputHandler(
-      this.state.Content,
-      "ContentTouch",
-      "ContentError"
-    );
-    let isFolderValid = this.UserInputHandler(
-      this.state.Folder,
-      "FolderTouch",
-      "FolderError"
-    );
 
-    console.log(isFolderValid, isContentValid, isNameValid);
-
-    if (isNameValid && isContentValid && isFolderValid) {
+    if (this.state.isFormReady) {
       let date = new Date();
       let createdTime =
-        date.getMonth() + 1 + "/" + date.getDate() + "/" + date.getFullYear();
+        date.getMonth() + 1 + "-" + date.getDate() + "-" + date.getFullYear();
 
       fetch(`${config.API_ENDPOINT}/notes`, {
         method: "POST",
@@ -80,10 +125,10 @@ class AddNote extends React.Component {
         },
         body: JSON.stringify({
           id: uniqid(),
-          name: this.state.Name,
+          name: this.state.title,
           modified: createdTime,
-          folderId: this.state.Folder,
-          content: this.state.Content,
+          folderId: this.state.selectedFolder,
+          content: this.state.content,
         }),
       })
         .then((response) => {
@@ -97,18 +142,24 @@ class AddNote extends React.Component {
             .json()
             .then(() => {
               this.setState({
-                Name: "",
-                Content: "",
-                Folder: "Select",
+                title: "",
+                content: "",
+                selectedFolder: "Select",
                 folders: [],
-                NameTouch: false,
-                ContentTouch: false,
-                FolderTouch: false,
-                NameError: "",
-                ContentError: "",
-                FolderError: "",
-                value: "Select",
+                nameTouch: false,
+                contentTouch: false,
+                folderTouch: false,
+                titleError: "",
+                contentError: "",
+                folderError: "",
                 error: "",
+                createNewNoteError: false,
+                isTitleValid: false,
+                isContentValid: false,
+                isSelectedFolderValid: false,
+                isFormReady: false,
+                evTargetName: "",
+                evTargetValue: "",
               });
             })
             .then(() => {
@@ -123,22 +174,22 @@ class AddNote extends React.Component {
         });
     }
   };
+
   render() {
     return (
-      <form>
+      <form id="addNote-form">
         <p>
-          <label htmlFor="note-name">Note Name: </label>
+          <label htmlFor="note-name">Note Title: </label>
           <input
             required
             type="text"
-            id="note-name"
-            placeholder="New note..."
-            name="Name"
-            value={this.state.Name}
+            placeholder="Note Title..."
+            name="title"
+            value={this.state.title}
             onChange={(ev) => this.inputChangeHanlder(ev)}
           />
           {this.state.NameTouch && (
-            <ValidationError message={this.state.NameError} />
+            <ValidationError message={this.state.titleError} />
           )}
         </p>
         <p>
@@ -148,21 +199,21 @@ class AddNote extends React.Component {
             type="text"
             id="note-content"
             placeholder="New content..."
-            name="Content"
-            value={this.state.Content}
+            name="content"
+            value={this.state.content}
             onChange={(ev) => this.inputChangeHanlder(ev)}
           />
           {this.state.ContentTouch && (
-            <ValidationError message={this.state.ContentError} />
+            <ValidationError message={this.state.contentError} />
           )}
         </p>
         <label htmlFor="note-folder">folder: </label>
         <select
-          name="Folder"
+          name="selectedFolder"
           onChange={(ev) => this.inputChangeHanlder(ev)}
-          value={this.state.value}
+          value={this.state.selectedFolder}
         >
-          <option value="...">...</option>
+          <option value="Select">...</option>
           {this.context.folders.map((folder, index) => {
             return (
               <option key={index} value={folder.id}>
@@ -172,10 +223,16 @@ class AddNote extends React.Component {
           })}
         </select>
         {this.state.FolderTouch && (
-          <ValidationError message={this.state.FolderError} />
+          <ValidationError message={this.state.folderError} />
         )}
         <br />
-        <button onClick={(ev) => this.saveNewNote(ev)}>Save</button>
+        {this.state.isFormReady ? (
+          <button onClick={(ev) => this.saveNewNote(ev)}>Save</button>
+        ) : (
+          <button disabled onClick={(ev) => this.saveNewNote(ev)}>
+            Save
+          </button>
+        )}
         {this.state.createNewNoteError && (
           <ValidationError message={this.state.error} />
         )}

@@ -1,10 +1,39 @@
 .note-container{
     border: 1px solid black;
     margin: 30px;
+    font-family: 'Comfortaa', cursive;
+    position: relative;
+    height: 85px;
+    width: 50%;
 }
-.note-info{
-    display: inline-block;
+.btn{
+    border: 1px solid black;
+    padding: 5px 20px;
+    font-size: 15px;
+    font-family: 'Comfortaa', cursive;
+    background: #C6878F;
+    color: white;
+    cursor: pointer;
+    margin: 10px;
+    transition: 0.8s;
+    height: 25px;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    border-radius: 10px;
 }
-h2{
-    float: left;
+#note-name{
+    text-decoration: none;
+    font-weight: 500;
+    color: black;
+    font-size: 25px;
+    position: absolute;
+    left: 10px;
+    top: 10px;
+}
+#date-modified{
+    font-size: 12px;
+    position: absolute;
+    bottom: 0px;
+    left: 10px;
 }
