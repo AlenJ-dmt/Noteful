@@ -3,25 +3,28 @@ import { Link } from "react-router-dom";
 import "./Note.css";
 import NoteContext from '../NoteContext'
 import PropTypes from "prop-types"
+import config from "../config";
 
 class Note extends React.Component {
 
   static contextType = NoteContext
   handleClickDelete = (ev) => {
 
-    const noteId = this.props.id
+    const noteId = String(this.props.id)
     
-    fetch(`http://localhost:9090/notes/${noteId}`, {
+    fetch(`${config.API_ENDPOINT}/notes/${noteId}`, {
       method: "DELETE",
       headers: {
         "content-type": "application/json",
       },
     }).then(res => {
+      
       if (!res.ok)
         return res.json().then(e => Promise.reject(e))
-      return res.json()
+      
     })
     .then(() => {
+      console.log( typeof noteId)
       this.context.deleteNote(noteId)
     })
     .catch(error => {
@@ -44,7 +47,7 @@ class Note extends React.Component {
 
 Note.propTypes = {
   date: PropTypes.string,
-  id: PropTypes.string.isRequired,
+  id: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired
 }
 

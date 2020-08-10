@@ -26,7 +26,7 @@ class Notes extends React.Component {
       ));
     } else {
       let notes = this.context.notes.filter(
-        (note) => note.folderId === folderId
+        (note) => String(note.folderId) === folderId
       );
       return notes.map((note, idx) => (
         <Note
@@ -54,7 +54,7 @@ class Notes extends React.Component {
 }
 
 Notes.propTypes = {
-  folderId: PropTypes.string
+  folderId: PropTypes.number
 };
 
 export default Notes;

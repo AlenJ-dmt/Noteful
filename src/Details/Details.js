@@ -8,8 +8,8 @@ class Details extends React.Component {
   
   render() {
     const { noteId } = this.props.match.params
-    const selectedNote =  this.context.notes.filter(note => note.id === noteId)
-    const currentFolder = this.context.folders.filter(folder => folder.id === selectedNote[0].folderId)
+    const selectedNote =  this.context.notes.filter(note => String(note.id) === String(noteId))
+    const currentFolder = this.context.folders.filter(folder => String(folder.id) === String(selectedNote[0].folderId))
     
     return (
       <AnimalCard selectedNote={selectedNote} currentFolder={currentFolder}/>

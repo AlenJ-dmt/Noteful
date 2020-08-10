@@ -16,7 +16,7 @@ class Main extends React.Component {
 }
 
 Main.propTypes = {
-  folderId: PropTypes.string,
+  folderId: PropTypes.number,
 };
 
 export default Main;
