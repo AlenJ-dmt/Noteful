@@ -61,7 +61,7 @@ class AddNote extends React.Component {
         );
       }
     } else {
-      if (inputValue.length > 4) {
+      if (inputValue.length > 3) {
         this.setState(
           {
             [inputName === "title" ? "isTitleValid" : "isContentValid"]: true,
@@ -94,7 +94,7 @@ class AddNote extends React.Component {
         [error]: "This Field Can't be empty",
         [Touch]: true,
       });
-    } else if (inputField.length < 4) {
+    } else if (inputField.length < 3) {
       this.setState({
         [error]: "This field must be grater than 4 letterss",
         [Touch]: true,
@@ -165,7 +165,7 @@ class AddNote extends React.Component {
             .then(() => {
               this.context.handleCreateNewNote();
             });
-        })
+        }).then(() => this.props.history.push(`/`))
         .catch((err) => {
           this.setState({
             error: "Something Went wrong while creating a new note",
