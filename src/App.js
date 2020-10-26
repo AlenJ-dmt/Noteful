@@ -11,6 +11,7 @@ import ErrorBoundary from "../src/components/ErrorBoundary";
 import config from "./config";
 import AddNote from "./components/AddNote";
 import AddFolder from "./components/AddFolder";
+import Update from "./update/Update"
 
 class App extends React.Component {
   state = {
@@ -121,6 +122,11 @@ class App extends React.Component {
                 exact
                 path="/addFolder"
                 render={(props) => <AddFolder {...props} />}
+              />
+              <Route 
+              exact
+              path='/update'
+              render={(props) => <Update {...props} />}
               />
               <Route component={NotFoundPage} />
             </Switch>

@@ -1,23 +1,25 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useHistory } from "react-router-dom";
 import noteContext from "../NoteContext";
 import "./AnimalCard.css";
 import PropTypes from "prop-types";
 import config from "../config";
 import QRCode from "qrcode.react";
+import Update from '../update/Update'
 
 const AnimalCard = (props) => {
   const context = useContext(noteContext);
-
+  const history = useHistory()
   const { noteId } = useParams();
+  const [editMode, setEditMode] = useState(false)
 
   let cFolder = context.folders;
 
   const [state, setState] = useState({
     folderId: "Loading",
     name: "Loading",
-    modified: "Loading",
     content: "Loading",
+    id: 'Loading'
   });
 
   const getNote = () => {
@@ -29,7 +31,8 @@ const AnimalCard = (props) => {
           name: jsonResponse.name,
           content: jsonResponse.content,
         })
-      );
+      )
+      .then(() => setEditMode(false));
   };
 
   useEffect(() => {
@@ -58,7 +61,17 @@ const AnimalCard = (props) => {
         <br></br>
         <p>Location: {state.content}</p>
         <br></br>
-        <div>
+        <button
+          onClick={() => {
+            setEditMode(true)
+          }}
+        >
+          Edit
+        </button>
+        { editMode && <Update getNote={() => getNote()} folderId={state.folderId} /> }
+
+        <br></br>
+        <div style={{margin: 20}}>
           <QRCode value={window.location.href} />
         </div>
       </div>
