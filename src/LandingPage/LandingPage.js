@@ -14,6 +14,7 @@ const LandingPage = () =>{
         context.setUserKey(key)
         if(key === 'AlenDiaz'){
             history.push('/')
+            window.localStorage.setItem('auth',  'AlenDiaz' )
         }
     }
 

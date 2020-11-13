@@ -85,7 +85,7 @@ class App extends React.Component {
   setKey = (userKey) => {
     this.setState({
       key: userKey
-    }, console.log(this.state.key))
+    })
   }
 
   render() {
@@ -106,7 +106,8 @@ class App extends React.Component {
           <NoteContext.Provider value={value}>
             {/* <Header /> */}
             <Switch>
-              {this.state.key !== 'AlenDiaz' ?
+              
+              { window.localStorage.getItem('auth') !== 'AlenDiaz' ?
                 <Route
                   exact
                   path="/login"
