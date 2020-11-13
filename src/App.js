@@ -12,12 +12,14 @@ import config from "./config";
 import AddNote from "./components/AddNote";
 import AddFolder from "./components/AddFolder";
 import Update from "./update/Update"
+import LandingPage from './LandingPage/LandingPage'
 
 class App extends React.Component {
   state = {
     folders: [],
     notes: [],
     fetchError: false,
+    key: ''
   };
 
   componentDidMount() {
@@ -70,7 +72,7 @@ class App extends React.Component {
       );
   };
 
-  handleCreateNewNote = () =>{
+  handleCreateNewNote = () => {
     fetch(`${config.API_ENDPOINT}/notes`)
       .then((response) => response.json())
       .then((jsonResponse) =>
@@ -78,6 +80,12 @@ class App extends React.Component {
           notes: jsonResponse,
         })
       );
+  }
+
+  setKey = (userKey) => {
+    this.setState({
+      key: userKey
+    }, console.log(this.state.key))
   }
 
   render() {
@@ -88,30 +96,40 @@ class App extends React.Component {
       isCreatingNewFolder: this.state.isCreatingNewFolder,
       handleCreateNewFolder: this.handleCreateNewFolder,
       fetchError: this.state.fetchError,
-      handleCreateNewNote: this.handleCreateNewNote
+      handleCreateNewNote: this.handleCreateNewNote,
+      key: this.state.key,
+      setUserKey: this.setKey
     };
     return (
       <div className="App">
         <ErrorBoundary>
           <NoteContext.Provider value={value}>
-            <Header />
+            {/* <Header /> */}
             <Switch>
+              {this.state.key !== 'AlenDiaz' ?
+                <Route
+                  exact
+                  path="/login"
+                  render={() => <LandingPage />}
+                />
+                : (
+
+                  <Route
+                    exact
+                    path="/note/:noteId"
+                    render={(props) => (
+                      <Details
+                        {...props}
+                      // noteId={window.location.pathname.substring(6)}
+                      />
+                    )}
+                  />)}
               <Route exact path="/" render={(props) => <Main {...props} />} />
               <Route
                 exact
                 path="/folder/:folderId"
                 // render={() => <Folders folders={this.state.Store.folders} />}
                 render={(props) => <Main {...props} />}
-              />
-              <Route
-                exact
-                path="/note/:noteId"
-                render={(props) => (
-                  <Details
-                    {...props}
-                    // noteId={window.location.pathname.substring(6)}
-                  />
-                )}
               />
               <Route
                 exact
@@ -123,10 +141,10 @@ class App extends React.Component {
                 path="/addFolder"
                 render={(props) => <AddFolder {...props} />}
               />
-              <Route 
-              exact
-              path='/update'
-              render={(props) => <Update {...props} />}
+              <Route
+                exact
+                path='/update'
+                render={(props) => <Update {...props} />}
               />
               <Route component={NotFoundPage} />
             </Switch>
