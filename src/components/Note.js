@@ -38,7 +38,7 @@ class Note extends React.Component {
         <Link id='note-name' to={`/note/${this.props.id}`}>{this.props.name}</Link>
         <div className="note-info">
           <p id='date-modified' >Modified: {this.props.date.slice(0, 10)}</p>
-          <button className='btn' onClick={(ev) => {this.handleClickDelete(ev)}}> Delete </button>
+          {/* <button className='btn' onClick={(ev) => {this.handleClickDelete(ev)}}> Delete </button> */}
         </div>
       </div>
     );
