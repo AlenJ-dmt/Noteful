@@ -5,13 +5,13 @@ import "./AnimalCard.css";
 import PropTypes from "prop-types";
 import config from "../config";
 import QRCode from "qrcode.react";
-import Update from '../update/Update'
+import Update from "../update/Update";
 
 const AnimalCard = (props) => {
   const context = useContext(noteContext);
-  const history = useHistory()
+  const history = useHistory();
   const { noteId } = useParams();
-  const [editMode, setEditMode] = useState(false)
+  const [editMode, setEditMode] = useState(false);
 
   let cFolder = context.folders;
 
@@ -19,8 +19,66 @@ const AnimalCard = (props) => {
     folderId: "Loading",
     name: "Loading",
     content: "Loading",
-    id: 'Loading'
+    id: "Loading",
   });
+
+  const venderRim = (ev) => {
+    ev.preventDefault();
+
+    fetch(`${config.API_ENDPOINT}/notes/${noteId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: state.name,
+        folderId: 17,
+        content: state.content,
+      }),
+    })
+      .then((response) => {
+        if (response.status !== 204) {
+          console.log(
+            "Looks like there was a problem. Status Code: " + response.status
+          );
+          return;
+        }
+      })
+      .then(() => {
+        history.push("/folder/17");
+        props.getNote();
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const prestarRim = (ev) => {
+    ev.preventDefault();
+
+    fetch(`${config.API_ENDPOINT}/notes/${noteId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: state.name,
+        folderId: 18,
+        content: state.content,
+      }),
+    })
+      .then((response) => {
+        if (response.status !== 204) {
+          console.log(
+            "Looks like there was a problem. Status Code: " + response.status
+          );
+          return;
+        }
+      })
+      .then(() => {
+        history.push("/folder/18");
+        props.getNote();
+      })
+      .catch((err) => console.log(err));
+  };
 
   const getNote = () => {
     fetch(`${config.API_ENDPOINT}/notes/${noteId}`)
@@ -63,15 +121,27 @@ const AnimalCard = (props) => {
         <br></br>
         <button
           onClick={() => {
-            setEditMode(true)
+            setEditMode(true);
           }}
         >
           Edit
         </button>
-        { editMode && <Update getNote={() => getNote()} folderId={state.folderId} /> }
+        <div className="buttons-container">
+          <button style={{backgroundColor: 'green', color: 'white'}} className="detail-btn" onClick={(ev) => venderRim(ev)}>
+            {" "}
+            Vender{" "}
+          </button>
+          <button style={{backgroundColor: 'red', color: 'white'}} className="detail-btn" onClick={(ev) => prestarRim(ev)}>
+            {" "}
+            Prestar{" "}
+          </button>
+        </div>
+        {editMode && (
+          <Update getNote={() => getNote()} folderId={state.folderId} />
+        )}
 
         <br></br>
-        <div style={{margin: 20}}>
+        <div style={{ margin: 20 }}>
           <QRCode value={window.location.href} />
         </div>
       </div>
