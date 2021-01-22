@@ -6,14 +6,17 @@ import PropTypes from "prop-types";
 import config from "../config";
 import QRCode from "qrcode.react";
 import Update from "../update/Update";
+import ReactLoading from "react-loading";
 
-const AnimalCard = (props) => {
+const AnimalCard = (props, { type, color }) => {
   const context = useContext(noteContext);
   const history = useHistory();
   const { noteId } = useParams();
   const [editMode, setEditMode] = useState(false);
 
   let cFolder = context.folders;
+
+  const [isLoading, setIsLoading] = useState(true);
 
   const [state, setState] = useState({
     folderId: "Loading",
@@ -81,6 +84,7 @@ const AnimalCard = (props) => {
   };
 
   const getNote = () => {
+    setIsLoading(true);
     fetch(`${config.API_ENDPOINT}/notes/${noteId}`)
       .then((response) => response.json())
       .then((jsonResponse) =>
@@ -90,7 +94,10 @@ const AnimalCard = (props) => {
           content: jsonResponse.content,
         })
       )
-      .then(() => setEditMode(false));
+      .then(() => {
+        setEditMode(false);
+        setIsLoading(false);
+      });
   };
 
   useEffect(() => {
@@ -126,16 +133,30 @@ const AnimalCard = (props) => {
         >
           Edit
         </button>
-        <div className="buttons-container">
-          <button style={{backgroundColor: 'green', color: 'white'}} className="detail-btn" onClick={(ev) => venderRim(ev)}>
-            {" "}
-            Vender{" "}
-          </button>
-          <button style={{backgroundColor: 'red', color: 'white'}} className="detail-btn" onClick={(ev) => prestarRim(ev)}>
-            {" "}
-            Prestar{" "}
-          </button>
-        </div>
+        <br></br>
+        <br></br>
+        {isLoading ? (
+          <ReactLoading type={"spin"} color={"gray"} height={175} width={175} />
+        ) : (
+          <div className="buttons-container">
+            <button
+              style={{ backgroundColor: "green", color: "white" }}
+              className="detail-btn"
+              onClick={(ev) => venderRim(ev)}
+            >
+              {" "}
+              Vender{" "}
+            </button>
+            <button
+              style={{ backgroundColor: "red", color: "white" }}
+              className="detail-btn"
+              onClick={(ev) => prestarRim(ev)}
+            >
+              {" "}
+              Prestar{" "}
+            </button>
+          </div>
+        )}
         {editMode && (
           <Update getNote={() => getNote()} folderId={state.folderId} />
         )}
