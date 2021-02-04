@@ -42,12 +42,13 @@ const Update = (props) => {
         <label>Hollander: </label>{" "}
         <input
           name="name"
-          value=""
+          value={state.name}
           onChange={(ev) => setState({ ...state, name: ev.target.value })}
         />
         <label>Location: </label>{" "}
         <input
           name="content"
+          value={state.content}
           onChange={(ev) => setState({ ...state, content: ev.target.value })}
         />
         <button onClick={(ev) => updateNote(ev)}>Save </button>
