@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 
 const Update = (props) => {
   const [state, setState] = useState({
-    name: "",
+    name: props.hollander,
     content: "",
   });
 

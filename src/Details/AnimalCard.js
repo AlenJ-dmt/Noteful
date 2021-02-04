@@ -159,7 +159,7 @@ const AnimalCard = (props, { type, color }) => {
           </div>
         )}
         {editMode && (
-          <Update getNote={() => getNote()} folderId={state.folderId} />
+          <Update getNote={() => getNote()} hollander={state.name} folderId={state.folderId} />
         )}
 
         <br></br>
