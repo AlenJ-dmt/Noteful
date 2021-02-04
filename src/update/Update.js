@@ -39,12 +39,13 @@ const Update = (props) => {
   return (
     <>
       <form>
-        <label>nombre: </label>{" "}
+        <label>Hollander: </label>{" "}
         <input
           name="name"
+          value=""
           onChange={(ev) => setState({ ...state, name: ev.target.value })}
         />
-        <label>description: </label>{" "}
+        <label>Location: </label>{" "}
         <input
           name="content"
           onChange={(ev) => setState({ ...state, content: ev.target.value })}

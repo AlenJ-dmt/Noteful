@@ -45,7 +45,7 @@ class Notes extends React.Component {
       <div className="notes">
         {this.context.fetchError && <ErrorMsg>Somthing Went Wrong</ErrorMsg>}
         {this.notesComponent()}
-        <button onClick={() => this.props.history.push(`/addNote`)}>
+        <button className="add__note__button" onClick={() => this.props.history.push(`/addNote`)}>
           Add Note
         </button>
       </div>

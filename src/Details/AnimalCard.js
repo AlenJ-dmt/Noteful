@@ -106,7 +106,7 @@ const AnimalCard = (props, { type, color }) => {
 
   return (
     <div className="detail">
-      <div className="sidebar">
+      {/* <div className="sidebar">
         <Link to="/">Go Back:</Link>
         {state.folderId === "Loading" ? (
           <div>
@@ -120,9 +120,10 @@ const AnimalCard = (props, { type, color }) => {
             <h2>{cFolder[state.folderId - 1].name}</h2>
           </div>
         )}
-      </div>
+      </div> */}
+      <Link to="/" >Go Back</Link>
       <div className="main-d">
-        <p>Title: {state.name}</p>
+        <p>Hollander: {state.name}</p>
         <br></br>
         <p>Location: {state.content}</p>
         <br></br>
